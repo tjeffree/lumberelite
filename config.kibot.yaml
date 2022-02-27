@@ -1,0 +1,86 @@
+kibot:
+  version: 1
+
+outputs:
+  - name: "gerber_zip"
+    type: compress
+    comment: "ZIP file of gerber and drill files for PCB fabrication"
+    dir: "+gerbers/%f/"
+    options:
+      files:
+        - from_output: gerbers
+          dest: /
+        - from_output: drill
+          dest: /
+
+  - name: "bom"
+    type: bom
+    comment: "KiCad BOM"
+    dir: "+docs/"
+    options:
+      format: CSV  # HTML or CSV
+
+  # Copying from project settings, which have been used with:
+  # JLCPCB, SmartPCB88
+  - name: "drill"
+    type: excellon
+    comment: "The drill files"
+    dir: "+gerbers/%f/"
+    options:
+      metric_units: false
+      pth_and_npth_single_file: false
+
+  - name: "gerbers"
+    type: gerber
+    comment: "The gerber files"
+    dir: "+gerbers/%f/"
+    layers:
+      - "F.Cu"
+      - "B.Cu"
+      - "F.Paste"
+      - "B.Paste"
+      - "F.SilkS"
+      - "B.SilkS"
+      - "F.Mask"
+      - "B.Mask"
+      - "Edge.Cuts"
+    options:
+      create_gerber_job_file: false
+      use_gerber_net_attributes: false
+      use_gerber_x2_attributes: false
+
+  - name: "pcbdraw_top"
+    type: pcbdraw
+    dir: "+docs/images/"
+    comment: "Pretty 2D render of the top of the PCB, using pcbdraw"
+    options:
+      # Include revision (-%r) to the output
+      output: "%f-%r-%i%v.%x"
+
+  - name: "pcbdraw_bottom"
+    type: pcbdraw
+    comment: "Pretty 2D render of the bottom of the PCB, using pcbdraw"
+    dir: "+docs/images/"
+    options:
+      bottom: true
+      # Include revision (-%r) to the output
+      output: "%f-%r-%i%v.%x"
+
+  - name: "schematic_print"
+    type: pdf_sch_print
+    comment: "PDF print of the schematic"
+    dir: "+docs/"
+
+  - name: "3d_top"
+    type: render_3d
+    comment: "Simple 3D view"
+    dir: "+docs/images/"
+    run_by_default: false
+    options:
+      background1: "#CCCCE5"
+      background2: "#CCCCE5"
+      height: 2160
+      width: 5120
+      zoom: 7
+      move_y: -2
+
