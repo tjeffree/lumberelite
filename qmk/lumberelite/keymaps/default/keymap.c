@@ -84,8 +84,9 @@ static void render_layer_info(void) {
 
 }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     render_layer_info();
+    return false;
 }
 
 #endif
@@ -283,7 +284,7 @@ static void print_status_narrow(void) {
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_90; }
 
-void oled_task_user(void) {
+bool oled_task_user(void) {
     /* KEYBOARD PET VARIABLES START */
 
     current_wpm   = get_current_wpm();
@@ -292,6 +293,7 @@ void oled_task_user(void) {
     /* KEYBOARD PET VARIABLES END */
 
     print_status_narrow();
+    return false;
 }
 
 #endif
